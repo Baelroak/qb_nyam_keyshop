@@ -36,3 +36,21 @@ RegisterNetEvent('nyam:server:CreateVehiclekey', function(data)
 		TriggerClientEvent('QBCore:Notify', src, Lang:t('error.not_enough_money'), 'error')
 	end
 end)
+
+RegisterNetEvent('nyam:server:DeleteVehicleKey', function(plate)
+	local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    if Player then
+		local items = Player.Functions.GetItemsByName('keys')
+		if items then	
+			for _, v in pairs(items) do
+				if v.info.vehicleplate == plate then
+				local ItemData = Player.Functions.GetItemBySlot(v.slot)
+					Player.Functions.RemoveItem(v.name, ItemData.amount, v.slot)
+					TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[v.name], 'remove')
+				end
+			end
+		end
+    end
+end)
+
